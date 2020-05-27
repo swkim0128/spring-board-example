@@ -1,0 +1,75 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+   <title>Board</title>
+</head>
+
+<script src="/js/jQuery-2.1.4.min.js"></script>
+
+<script>
+   $(document).ready(function() {
+
+      var formObj = $("#board");
+
+      $("#btnModify").on("click", function() {
+         var boardNo = $("#boardNo");
+         var boardNoVal = boardNo.val();
+         
+         self.location = "/board/modify?boardNo=" + boardNoVal;
+      });
+
+      $("#btnRemove").on("click", function() {
+         formObj.attr("action", "/board/remove");
+         formObj.submit();
+      });
+
+      $("#btnList").on("click", function() {
+         self.location = "/board/list";
+      });
+
+   });
+</script>
+
+<body>
+   <h2>READ</h2>
+   <form id="board" th:object="${board}" method="POST">
+      <input type="hidden" name="boardNo" th:field="*{boardNo}" />
+   
+      <table>
+         <tr>
+            <td>Title</td>
+            <td><input type="text" name="title" th:field="*{title}" readonly="readonly" /></td>
+         </tr>
+         <tr>
+            <td>Writer</td>
+            <td><input type="text" name="writer" th:field="*{writer}" readonly="readonly" /></td>
+         </tr>
+         <tr>
+            <td>Content</td>
+            <td><textarea name="content" th:field="*{content}" readonly="readonly"></textarea></td>
+         </tr>
+         <tr th:if="${fileType} != null">
+         	<td>사진</td>
+         	<td><img src="display?boardNo=${board.boardNo}" th:src="@{|display?boardNo=${board.boardNo}|}" width="400" height="200" /></td>
+         	<td></td>         	
+         </tr>
+         <tr>
+         	<td>문서</td>
+         	<td><input type="text" th:value="*{filePath}" style="width: 500px;"/></td>
+         	<td></td>
+         </tr>         
+         <tr>
+         	<td>파일</td>
+         	<td><input type="file" name="file" /></td>
+         	<td></td>         	
+         </tr>
+      </table>   
+   </form>   
+   
+   <div>
+      <button type="submit" id="btnModify">Modify</button>
+      <button type="submit" id="btnRemove">Remove</button>
+      <button type="submit" id="btnList">List</button>
+   </div>
+</body>
+</html>
